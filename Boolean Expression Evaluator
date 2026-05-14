@@ -1,3 +1,43 @@
+## Boolean Expression Lexer and Parser
+Problem Statement
+
+Build a Lexer and Parser for evaluating simple Boolean expressions.
+
+The parser must correctly handle operator precedence in the following order:
+
+Required Tokens,TRUE,FALSE,AND,OR,NOT,LPAREN,RPAREN
+
+All keywords are reserved words extracted from identifiers.
+
+
+NOT → Highest precedence
+AND → Medium precedence
+OR → Lowest precedence
+
+Parentheses () must override precedence normally.
+expr   : expr OR term
+       | term
+
+term   : term AND factor
+       | factor
+
+factor : NOT factor
+       | TRUE
+       | FALSE
+       | LPAREN expr RPAREN
+
+TRUE AND FALSE OR TRUE
+NOT FALSE AND TRUE
+TRUE OR (FALSE AND TRUE)
+NOT (TRUE OR FALSE)
+
+Expected Output
+Result: True
+Result: True
+Result: True
+Result: False
+
+###############################solution#################################
 import ply.lex as lex
 import ply.yacc as yacc
 
