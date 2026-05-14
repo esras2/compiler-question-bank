@@ -1,0 +1,58 @@
+uild a Lexer and a basic Parser that counts how many words are in the input. A word is a sequence of letters only.
+
+Required Tokens
+WORD
+WORD: one or more letters (A–Z, a–z) only.
+
+Grammar Rules
+program : program WORD | WORD
+
+Sample Input
+hello world this is compiler
+
+Expected Output
+Total Words: 5
+👉 Focus: Basic token recognition · No complex grammar.
+
+###############################################################################################################
+
+# ─── LEXER ────────────────────────────────────────────
+import ply.lex as lex
+import ply.yacc as yacc
+
+tokens = ['WORD']
+
+def t_WORD(t):
+    r'[A-Za-z]+'
+    return t
+
+t_ignore = ' \t'
+
+def t_error(t):
+    t.lexer.skip(1)
+
+lexer = lex.lex()
+
+# ─── PARSER ───────────────────────────────────────────
+word_count = 0
+
+def p_program_multiple(p):
+    '''program : program WORD'''
+    global word_count
+    word_count += 1
+
+def p_program_single(p):
+    '''program : WORD'''
+    global word_count
+    word_count += 1
+
+def p_error(p):
+    print(f"Syntax error at: {p}")
+
+parser = yacc.yacc()
+
+# ─── TEST ─────────────────────────────────────────────
+data = "hello world this is compiler"
+word_count = 0
+parser.parse(data, lexer=lexer)
+print(f"Total Words: {word_count}")
